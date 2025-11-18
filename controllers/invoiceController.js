@@ -71,7 +71,7 @@ const createInvoice = async (req, res) => {
 // @access  Public
 const updateInvoice = async (req, res) => {
   try {
-    const invoice = await Invoice.updateinvoice(req.params.id, req.body)
+    const invoice = await Invoice.updateInvoice(req.params.id, req.body)
 
     if (!invoice) {
       return res.status(404).json({
