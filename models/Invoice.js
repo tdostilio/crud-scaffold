@@ -1,10 +1,10 @@
 const mongoose = require("mongoose")
 
-const itemSchema = new mongoose.Schema(
+const invoiceSchema = new mongoose.Schema(
   {
-    name: {
+    email: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, "email is required"],
       trim: true,
     },
     description: {
@@ -26,10 +26,10 @@ const itemSchema = new mongoose.Schema(
   }
 )
 
-itemSchema.statics.createItem = async function (data) {
+invoiceSchema.statics.createInvoice = async function (data) {
   // Add any custom validation or preprocessing here
-  if (!data.name) {
-    throw new Error("Name is required")
+  if (!data.email) {
+    throw new Error("Email is required")
   }
 
   if (!data.description) {
@@ -43,7 +43,7 @@ itemSchema.statics.createItem = async function (data) {
   return item
 }
 
-itemSchema.statics.updateItem = async function (id, data) {
+invoiceSchema.statics.updateInvoice = async function (id, data) {
   // Prevent status from being changed via update
   delete data.status
 
@@ -53,7 +53,7 @@ itemSchema.statics.updateItem = async function (id, data) {
   })
 }
 
-itemSchema.statics.deleteItem = async function (id) {
+invoiceSchema.statics.deleteInvoice = async function (id) {
   return this.findByIdAndUpdate(
     id,
     {
@@ -64,6 +64,6 @@ itemSchema.statics.deleteItem = async function (id) {
   )
 }
 
-const Item = mongoose.model("Item", itemSchema)
+const Invoice = mongoose.model("Invoice", invoiceSchema)
 
-module.exports = Item
+module.exports = Invoice
