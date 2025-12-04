@@ -7,28 +7,11 @@ const invoiceSchema = new mongoose.Schema(
   }
 )
 
-invoiceSchema.statics.createInvoice = async function (data) {
-  const item = await this.create(data)
-  return item
-}
+invoiceSchema.statics.createInvoice = async function (data) {}
 
-invoiceSchema.statics.updateInvoice = async function (id, data) {
-  return this.findByIdAndUpdate(id, data, {
-    new: true,
-    runValidators: true,
-  })
-}
+invoiceSchema.statics.updateInvoice = async function (id, data) {}
 
-invoiceSchema.statics.deleteInvoice = async function (id) {
-  return this.findByIdAndUpdate(
-    id,
-    {
-      status: "deleted",
-      deletedAt: new Date(),
-    },
-    { new: true }
-  )
-}
+invoiceSchema.statics.deleteInvoice = async function (id) {}
 
 const Invoice = mongoose.model("Invoice", invoiceSchema)
 
