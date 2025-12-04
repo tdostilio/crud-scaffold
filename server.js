@@ -6,7 +6,7 @@ const connectDB = require("./config/database")
 const logger = require("./src/utils/logger")
 
 // Import routes
-const invoiceRoutes = require("./src/routes/invoiceRoutes")
+const invoiceRoutes = require("./src/routes/invoice")
 
 // Connect to database
 connectDB()

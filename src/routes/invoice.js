@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const requireTenant = require("../middleware/requireTenant")
 const {
   getAllInvoices,
   getInvoice,
@@ -7,6 +8,8 @@ const {
   updateInvoice,
   deleteInvoice,
 } = require("../controllers/invoiceController")
+
+router.use(requireTenant)
 
 router.route("/").get(getAllInvoices).post(createInvoice)
 

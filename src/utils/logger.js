@@ -1,11 +1,18 @@
 const winston = require("winston")
+const fs = require("fs")
+const path = require("path")
+
+// Ensure logs directory exists in production
+if (process.env.NODE_ENV === "production") {
+  const logsDir = path.join(__dirname, "..", "..", "logs")
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true })
+  }
+}
 
 const logger = winston.createLogger({
   level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.json()
-  ),
+  format: winston.format.combine(winston.format.timestamp(), winston.format.json()),
   transports: [
     // In development: log to console
     // In production: log to files
@@ -33,4 +40,3 @@ const logger = winston.createLogger({
 })
 
 module.exports = logger
-

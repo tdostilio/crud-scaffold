@@ -1,5 +1,6 @@
 const mongoose = require("mongoose")
 const logger = require("../utils/logger")
+const validator = require("validator")
 
 const invoiceSchema = new mongoose.Schema(
   {},
