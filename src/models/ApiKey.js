@@ -113,10 +113,17 @@ apiKeySchema.statics.revokeApiKey = async function (id, tenantId) {
 }
 
 // Static method to update an API key
+// SECURITY: Only allows updating safe fields (name, metadata)
+// Status, expiresAt, and permissions should be managed through dedicated methods
 apiKeySchema.statics.updateApiKey = async function (id, tenantId, data) {
   try {
-    const { name, status, expiresAt, permissions, metadata } = data
+    const { name, metadata } = data
     const updateData = {}
+
+    // Only allow updating name and metadata for security
+    // Status changes should use revokeApiKey() or dedicated activate/deactivate methods
+    // Expiration should not be extended (only shortened if needed)
+    // Permissions should not be changed after creation (security risk)
 
     if (name !== undefined) {
       if (typeof name !== "string" || name.trim().length === 0) {
@@ -125,29 +132,19 @@ apiKeySchema.statics.updateApiKey = async function (id, tenantId, data) {
       updateData.name = name.trim()
     }
 
-    if (status !== undefined) {
-      if (!["active", "revoked", "expired"].includes(status)) {
-        throw new Error("status must be one of: active, revoked, expired")
-      }
-      updateData.status = status
-    }
-
-    if (expiresAt !== undefined) {
-      if (expiresAt !== null && !validator.isDate(expiresAt)) {
-        throw new Error("expiresAt must be a valid date or null")
-      }
-      updateData.expiresAt = expiresAt
-    }
-
-    if (permissions !== undefined) {
-      if (!Array.isArray(permissions)) {
-        throw new Error("permissions must be an array")
-      }
-      updateData.permissions = permissions
-    }
-
     if (metadata !== undefined) {
       updateData.metadata = metadata
+    }
+
+    // Prevent updating status, expiresAt, or permissions through this method
+    if (data.status !== undefined || data.expiresAt !== undefined || data.permissions !== undefined) {
+      throw new Error(
+        "Cannot update status, expiresAt, or permissions through this method. Use dedicated methods (revokeApiKey, etc.)"
+      )
+    }
+
+    if (Object.keys(updateData).length === 0) {
+      throw new Error("No valid fields to update")
     }
 
     const apiKey = await ApiKey.findOneAndUpdate(
