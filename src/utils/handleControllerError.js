@@ -2,7 +2,6 @@ const handleControllerError = (res, err, context = "") => {
   // HandledError (expected errors)
   if (err.handled) {
     return res.status(err.statusCode).json({
-      success: false,
       error: err.message,
     })
   }
@@ -10,7 +9,6 @@ const handleControllerError = (res, err, context = "") => {
   // Mongoose validation
   if (err.name === "ValidationError") {
     return res.status(400).json({
-      success: false,
       error: "Validation failed",
       details: Object.values(err.errors).map((e) => e.message),
     })
@@ -19,15 +17,20 @@ const handleControllerError = (res, err, context = "") => {
   // Mongoose duplicate key
   if (err.code === 11000) {
     return res.status(409).json({
-      success: false,
       error: "Duplicate entry",
+    })
+  }
+
+  // Mongoose CastError
+  if (err.name === "CastError") {
+    return res.status(400).json({
+      error: "Invalid ID format",
     })
   }
 
   // Unexpected errors
   console.error(`Unexpected error ${context}:`, err)
   return res.status(500).json({
-    success: false,
     error: "Something went wrong",
   })
 }
