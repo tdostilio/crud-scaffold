@@ -7,6 +7,7 @@ const logger = require("./src/utils/logger")
 
 // Import routes
 const invoiceRoutes = require("./src/routes/invoice")
+const apiKeyRoutes = require("./src/routes/apiKey")
 
 // Connect to database
 connectDB()
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/api/invoices", invoiceRoutes)
+app.use("/api/api-keys", apiKeyRoutes)
 
 // Error handling middleware
 app.use((err, req, res, next) => {

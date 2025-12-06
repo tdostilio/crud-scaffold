@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const requireTenant = require("../middleware/requireTenant")
+const requireAuth = require("../middleware/requireAuth")
 const {
   getAllInvoices,
   getInvoice,
@@ -9,7 +9,8 @@ const {
   deleteInvoice,
 } = require("../controllers/invoiceController")
 
-router.use(requireTenant)
+// All invoice routes require authentication
+router.use(requireAuth)
 
 router.route("/").get(getAllInvoices).post(createInvoice)
 
