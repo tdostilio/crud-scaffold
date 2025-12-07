@@ -1,3 +1,5 @@
+const logger = require("./logger")
+
 const handleControllerError = (res, err, context = "") => {
   // HandledError (expected errors)
   if (err.handled) {
@@ -29,7 +31,12 @@ const handleControllerError = (res, err, context = "") => {
   }
 
   // Unexpected errors
-  console.error(`Unexpected error ${context}:`, err)
+  logger.error(`Unexpected error ${context}`, {
+    error: err.message,
+    stack: err.stack,
+    context,
+  })
+
   return res.status(500).json({
     error: "Something went wrong",
   })
