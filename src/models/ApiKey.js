@@ -6,7 +6,7 @@ const crypto = require("crypto")
 const apiKeySchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
-    tenantId: { type: String, required: true, index: true },
+    tenantId: { type: mongoose.Schema.Types.ObjectId, ref: "Tenant", required: true, index: true },
     keyHash: { type: String, required: true, unique: true, index: true }, // hashed version of the API key
     keyPrefix: { type: String, required: true }, // first few chars for identification (e.g., "sk_live_abc...")
     status: {
@@ -51,7 +51,7 @@ apiKeySchema.statics.createApiKey = async function (data) {
     if (!name || typeof name !== "string" || name.trim().length === 0) {
       throw new Error("name is required and must be a non-empty string")
     }
-    if (!tenantId || typeof tenantId !== "string") {
+    if (!tenantId || !mongoose.Types.ObjectId.isValid(tenantId)) {
       throw new Error("tenantId is required")
     }
     if (expiresAt && !validator.isDate(expiresAt)) {

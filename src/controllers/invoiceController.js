@@ -1,6 +1,6 @@
 const Invoice = require("../models/Invoice")
 const logger = require("../utils/logger")
-const validator = require("validator")
+const handleControllerError = require("../utils/handleControllerError")
 
 // @desc    Get all invoices
 // @route   GET /api/invoices
